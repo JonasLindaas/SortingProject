@@ -60,7 +60,7 @@ public class Item implements IItem, Comparable<IItem> {
 
     //TODO: improve the   a e s t h e t i c s
     public void printToConsole() {
-        String tmp = name + " | Score:" +  (int) score + "/10";
+        String tmp = name + " | Score: " +  (int) score + "/10";
         if(notes != null)
             tmp += " | Notes: " + notes;
         System.out.println(tmp);
