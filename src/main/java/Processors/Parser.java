@@ -1,3 +1,7 @@
+package Processors;
+
+import Storage.IItem;
+import Storage.Item;
 import javafx.util.Pair;
 
 public class Parser<E> implements IParser {

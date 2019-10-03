@@ -1,3 +1,5 @@
+package Storage;
+
 public class Item implements IItem, Comparable<IItem> {
     private final String name;
     private final double score;
