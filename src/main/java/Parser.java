@@ -1,7 +1,9 @@
 import javafx.util.Pair;
 
 public class Parser<E> implements IParser {
-    private final String STANDARD_FILTRIDE = "/10";  //The standard filtride used in my scoring system, change if you don't use it
+    private final String STANDARD_FILTRIDE = "/10";     //The standard filtride used in my scoring system, change if you don't use it
+
+    private final String FILTRIDE = STANDARD_FILTRIDE;  //Change this if you want to use your own custom filtride
 
     /**
      * Follows the following procedure to creat an Item
@@ -26,7 +28,7 @@ public class Parser<E> implements IParser {
 
         Pair<String, String> tmp = extractName(itemInput);
         final String name = tmp.getKey();
-        String notes = tryToFilterOut(tmp.getValue(), STANDARD_FILTRIDE);
+        String notes = tryToFilterOut(tmp.getValue(), FILTRIDE);
 
         return new Item(tmp.getKey());  //TODO: make the rest of the function
     }
