@@ -4,6 +4,7 @@ public class Parser<E> implements IParser {
     private final String STANDARD_FILTRIDE = "/10";     //The standard filtride used in my scoring system, change if you don't use it
 
     private final String FILTRIDE = STANDARD_FILTRIDE;  //Change this if you want to use your own custom filtride
+    private final Double DEFAULT_SCORE = 0.0;           //The score used if no score is found in the notes
 
     /**
      * Follows the following procedure to creat an Item
@@ -30,7 +31,36 @@ public class Parser<E> implements IParser {
         final String name = tmp.getKey();
         String notes = tryToFilterOut(tmp.getValue(), FILTRIDE);
 
-        return new Item(tmp.getKey());  //TODO: make the rest of the function
+        Pair<String, Double> notesAndScores = tryToExtractScore(notes);
+        Double score;
+        if(notesAndScores == null) {
+            score = DEFAULT_SCORE;
+        } else {
+            notes = notesAndScores.getKey();
+            score = notesAndScores.getValue();
+        }
+
+        if(containsOnlyWhitespaces(notes))
+            return new Item(name, score);
+
+        return new Item(name, score, notes);  //TODO: consider trimming the notes a bit, they might have too many whitespaces
+    }
+
+    /**
+     * Checks if a string only contains whitespaces (i.e. is empty for practical reasons)
+     *
+     * @param input String to check
+     * @return true if there are only whitespaces, false if there are any characters that are not whitespaces
+     */
+    private Boolean containsOnlyWhitespaces(String input) {
+        char[] inputChars = input.toCharArray();
+        for(char c : inputChars) {
+            if(c != ' ') {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //TODO: needs comments
@@ -40,7 +70,7 @@ public class Parser<E> implements IParser {
          *  1: Found number chars, looking for more
          *  2: Done looking for number chars, not looking for more
          */
-
+        //TODO: rename foundNameChar
         String numContainer     = "";       //Used to store the number characters (and a potential '.' char)
         int foundNumChar        = 0;        //Used to check whether we have started finding an approved char (numbers or one '.')
         boolean foundDot        = false;    //Used to check whether we have found the "dot" (aka '.') since there should only be one
@@ -77,7 +107,11 @@ public class Parser<E> implements IParser {
             }
         }
 
-        return null;
+        if(numContainer.length() == 0) {
+            return null;
+        }
+
+        return new Pair<>(tryToFilterOut(input, numContainer),Double.valueOf(numContainer));
     }
 
     /**
@@ -126,6 +160,6 @@ public class Parser<E> implements IParser {
         String[] tmp = input.split("\\|");
         String name = tmp[0].substring(0, tmp[0].length()-1); //Cuts off the trailing whitespace, since it is redundant
         String note = tmp[1];
-        return new Pair<String, String>(name, note);
+        return new Pair<>(name, note);
     }
 }
