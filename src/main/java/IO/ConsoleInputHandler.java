@@ -9,6 +9,7 @@ import java.util.Scanner;
  * inputStream you have to press Enter a couple of extra times
  */
 public class ConsoleInputHandler implements IInputHandler {
+    @Override
     public ArrayList<String> readInput() {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> stringList = new ArrayList<>();
