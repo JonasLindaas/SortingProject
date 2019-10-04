@@ -1,6 +1,6 @@
 package Storage;
 
-public class Item implements IItem, Comparable<IItem> {
+public class Item implements IItem {
     private final String name;
     private final double score;
     private final String notes;
@@ -69,7 +69,9 @@ public class Item implements IItem, Comparable<IItem> {
     }
 
     //TODO: revist and improve this once modifiers are implemented
-    public int compareTo(IItem otherItem) {
-        return Double.compare(this.getScore(), otherItem.getScore());
+    @Override
+    public int compareTo(Object o) {
+        IItem otherItem = (IItem) o;
+        return Double.compare(otherItem.getScore(), this.getScore());
     }
 }

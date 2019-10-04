@@ -3,7 +3,7 @@ package Storage;
 /** Interface for items, which store their name, score and any potential notes
  *  Does not use Setters to make immutable
  */
-public interface IItem {
+public interface IItem extends Comparable {
     /**
      * Get the name of the item
      * @return name
