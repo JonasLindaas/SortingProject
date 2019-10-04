@@ -18,6 +18,10 @@ public class ConsoleInputHandler implements IInputHandler {
             s = sc.nextLine();
             stringList.add(s);
         }
+
+        while(stringList.get(stringList.size()-1).equals("")) //Removes empty items from the stringList
+            stringList.remove(stringList.size()-1);
+
         return stringList;
     }
 }
