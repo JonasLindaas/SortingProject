@@ -34,16 +34,20 @@ public class Parser<E> implements IParser {
 
         Pair<String, String> tmp = extractName(itemInput);
         final String name = tmp.getKey();
-        String notes = tryToFilterOut(tmp.getValue(), FILTRIDE);
+        String notes = tmp.getValue();
+        Double score = DEFAULT_SCORE;
+        if(tmp.getValue().contains(FILTRIDE)) {
+            notes = tryToFilterOut(notes, FILTRIDE);
+            Pair<String, Double> notesAndScores = tryToExtractScore(notes);
 
-        Pair<String, Double> notesAndScores = tryToExtractScore(notes);
-        Double score;
-        if(notesAndScores == null) {
-            score = DEFAULT_SCORE;
-        } else {
-            notes = notesAndScores.getKey();
-            score = notesAndScores.getValue();
+            if(notesAndScores != null) {
+                notes = notesAndScores.getKey();
+                score = notesAndScores.getValue();
+            }
         }
+
+
+
 
         if(containsOnlyWhitespaces(notes))
             return new Item(name, score);
