@@ -2,10 +2,14 @@ import IO.ConsoleInputHandler;
 import IO.ConsoleOutputHandler;
 import IO.IInputHandler;
 import IO.IOutputHandler;
+import Processors.CollectionsSort;
+import Processors.ISort;
 import Processors.Parser;
 import Storage.IItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,10 +17,16 @@ public class Main {
         IInputHandler inputHandler = new ConsoleInputHandler();
         ArrayList<String> input = inputHandler.readInput();
 
-        ArrayList<IItem> items = new ArrayList<>();
+        List<IItem> items = new ArrayList<>();
         for(String s : input) {
             items.add(parser.createItem(s));
         }
+
+        ISort sorter = new CollectionsSort();
+        sorter.sort(items);
+
+        for(IItem i : items)
+            i.printToConsole();
 
         IOutputHandler outputHandler = new ConsoleOutputHandler();
 
@@ -24,7 +34,7 @@ public class Main {
         for(IItem item : items) {
             itemNames.add(item.getName());
         }
-        outputHandler.outputWithSMFormatting(itemNames);
+        //outputHandler.outputWithSMFormatting(itemNames);
 
     }
 }

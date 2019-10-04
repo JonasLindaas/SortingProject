@@ -76,7 +76,7 @@ public class Parser<E> implements IParser {
          *  2: Done looking for number chars, not looking for more
          */
         //TODO: rename foundNameChar
-        String numContainer     = "";       //Used to store the number characters (and a potential '.' char)
+        StringBuilder numContainer = new StringBuilder();       //Used to store the number characters (and a potential '.' char)
         int foundNumChar        = 0;        //Used to check whether we have started finding an approved char (numbers or one '.')
         boolean foundDot        = false;    //Used to check whether we have found the "dot" (aka '.') since there should only be one
         char[] numChars         = {'0','1','2','3','4','5','6','7','8','9'};
@@ -87,36 +87,41 @@ public class Parser<E> implements IParser {
                 break;
             } else if(foundNumChar == 1) {
                 for (char numChar : numChars) {
-                    if(c == '.') {
+                if(c == '-'){
+                    break outerLoop;
+                } else if(c == '.') {
                         if(foundDot) {
                             break outerLoop;
                         } else {
-                            numContainer = numContainer.concat(".");
+                            numContainer.append(".");
                             foundDot = true;
                         }
                     } else if(c == numChar) {
-                        numContainer = numContainer.concat(String.valueOf(c));
+                        numContainer.append(c);
                     } else {
                         foundNumChar++;
                     }
                 }
             } else if(foundNumChar == 0) {
                 for (char numChar : numChars) {
-                    if(c == '.') {
+                    if(c == '-') {
+                        numContainer.append("-");
+                        foundNumChar++;
+                        break;
+                    } else if(c == '.') {
                         break outerLoop;
                     } else if(c == numChar) {
                         foundNumChar++;
-                        numContainer = numContainer.concat(String.valueOf(c));
+                        numContainer.append(c);
                     }
                 }
             }
         }
-
         if(numContainer.length() == 0) {
             return null;
         }
 
-        return new Pair<>(tryToFilterOut(input, numContainer),Double.valueOf(numContainer));
+        return new Pair<>(tryToFilterOut(input, numContainer.toString()), Double.valueOf(numContainer.toString()));
     }
 
     /**
