@@ -8,7 +8,6 @@ import Processors.Parser;
 import Storage.IItem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -25,16 +24,13 @@ public class Main {
         ISort sorter = new CollectionsSort();
         sorter.sort(items);
 
-        for(IItem i : items)
-            i.printToConsole();
-
         IOutputHandler outputHandler = new ConsoleOutputHandler();
 
         ArrayList<String> itemNames = new ArrayList<>();
         for(IItem item : items) {
             itemNames.add(item.getName());
         }
-        //outputHandler.outputWithSMFormatting(itemNames);
+        outputHandler.outputWithSMFormatting(itemNames);
 
     }
 }
