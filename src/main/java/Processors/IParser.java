@@ -23,4 +23,13 @@ public interface IParser {
      */
     IItem createItem(String itemInput);
 
+    /**
+     * Returns the standard filtride stored in the interface
+     *
+     * @return default filtride
+     */
+    String getDefaultFiltride();
+
+    Double getDefaultScore();
+
 }

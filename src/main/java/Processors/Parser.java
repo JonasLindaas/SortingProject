@@ -5,9 +5,9 @@ import Storage.Item;
 import javafx.util.Pair;
 
 public class Parser<E> implements IParser {
-    private final String STANDARD_FILTRIDE = "/10";     //The standard filtride used in my scoring system, change if you don't use it
+    private final String DEFAULT_FILTRIDE = "/10";     //The standard filtride used in my scoring system, change if you don't use it
 
-    private final String FILTRIDE = STANDARD_FILTRIDE;  //Change this if you want to use your own custom filtride
+    private final String FILTRIDE = DEFAULT_FILTRIDE;  //Change this if you want to use your own custom filtride
     private final Double DEFAULT_SCORE = 0.0;           //The score used if no score is found in the notes
 
     /**
@@ -40,7 +40,7 @@ public class Parser<E> implements IParser {
             notes = tryToFilterOut(notes, FILTRIDE);
             Pair<String, Double> notesAndScores = tryToExtractScore(notes);
 
-            if(notesAndScores != null) {
+            if(notesAndScores.getValue() != null) {
                 notes = notesAndScores.getKey();
                 score = notesAndScores.getValue();
             }
@@ -52,7 +52,7 @@ public class Parser<E> implements IParser {
         if(containsOnlyWhitespaces(notes))
             return new Item(name, score);
 
-        return new Item(name, score, notes);  //TODO: consider trimming the notes a bit, they might have too many whitespaces
+        return new Item(name, score, notes);
     }
 
     /**
@@ -72,61 +72,43 @@ public class Parser<E> implements IParser {
         return true;
     }
 
-    //TODO: needs comments
+    //TODO: add comments to this
     private Pair<String, Double> tryToExtractScore(String input) {
-        /*foundNumChar explanation:
-         *  0: Looking for number chars
-         *  1: Found number chars, looking for more
-         *  2: Done looking for number chars, not looking for more
-         */
-        //TODO: rename foundNameChar
-        StringBuilder numContainer = new StringBuilder();       //Used to store the number characters (and a potential '.' char)
-        int foundNumChar        = 0;        //Used to check whether we have started finding an approved char (numbers or one '.')
-        boolean foundDot        = false;    //Used to check whether we have found the "dot" (aka '.') since there should only be one
-        char[] numChars         = {'0','1','2','3','4','5','6','7','8','9'};
-        char[] inputChars       = input.toCharArray();
-        outerLoop:
-        for(char c : inputChars) { //TODO: this is really ugly, refactor and split it up later
-            if(foundNumChar == 2) {
-                break;
-            } else if(foundNumChar == 1) {
-                for (char numChar : numChars) {
-                if(c == '-'){
-                    break outerLoop;
-                } else if(c == '.') {
-                        if(foundDot) {
-                            break outerLoop;
-                        } else {
-                            numContainer.append(".");
-                            foundDot = true;
-                        }
-                    } else if(c == numChar) {
-                        numContainer.append(c);
-                    } else {
-                        foundNumChar++;
-                    }
+        int startOfNumPos = 0;
+        int endOfNumPos = input.length();
+        boolean foundNum = false;
+        boolean foundDot = false;
+
+        for(int i = 0; i < input.length(); i++) {
+            if(!foundNum) {
+                if(Character.isDigit(input.charAt(i))) {
+                    foundNum = true;
+                    startOfNumPos = i;
+                    if(input.charAt(i-1) == '-')
+                        startOfNumPos--;
                 }
-            } else if(foundNumChar == 0) {
-                for (char numChar : numChars) {
-                    if(c == '-') {
-                        numContainer.append("-");
-                        foundNumChar++;
-                        break;
-                    } else if(c == '.') {
-                        break outerLoop;
-                    } else if(c == numChar) {
-                        foundNumChar++;
-                        numContainer.append(c);
-                    }
+            } else {
+                if(!foundDot) {
+                    if(input.charAt(i) == '.')
+                        foundDot = true;
+                } else if(!Character.isDigit(input.charAt(i))) {
+                    endOfNumPos = i;
+                    break;
                 }
             }
         }
-        if(numContainer.length() == 0) {
-            return null;
-        }
 
-        return new Pair<>(tryToFilterOut(input, numContainer.toString()), Double.valueOf(numContainer.toString()));
+        Double score = null;
+        if(startOfNumPos != 0)
+            score = Double.valueOf(input.substring(startOfNumPos, endOfNumPos));
+
+        String filtride = "";
+        if(score != null)
+            filtride = score.toString();
+
+        return new Pair<>(tryToFilterOut(input, filtride), score);
     }
+
 
     /**
      * Helper method that will attempt to filter out a substring toFilter from the input
@@ -175,5 +157,15 @@ public class Parser<E> implements IParser {
         String name = tmp[0].substring(0, tmp[0].length()-1); //Cuts off the trailing whitespace, since it is redundant
         String note = tmp[1];
         return new Pair<>(name, note);
+    }
+
+    @Override
+    public String getDefaultFiltride() {
+        return DEFAULT_FILTRIDE;
+    }
+
+    @Override
+    public Double getDefaultScore() {
+        return DEFAULT_SCORE;
     }
 }
