@@ -2,8 +2,9 @@ package Processors;
 
 import Storage.IItem;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
+import org.junit.rules.ExpectedException;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -11,6 +12,7 @@ import static org.junit.Assert.*;
 public class ParserTest {
     private Parser parser = new Parser();
     private String defaultFiltride = parser.getDefaultFiltride();
+    private Double defaultScore = parser.getDefaultScore();
     private Random r = new Random();
 
     @Before
@@ -63,6 +65,24 @@ public class ParserTest {
         assertEquals(name, testItem.getName());
     }
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void nullInputTest() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("The given input was invalid");
+        IItem testItem = parser.createItem(null);
+    }
+
+    @Test
+    public void emptyStringTest() {
+        String input = "";
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("The given input was invalid");
+        IItem testItem = parser.createItem(input);
+    }
+
     //TODO: there is way too much repeated code in these test
     @Test
     public void justNameTest() {
@@ -79,6 +99,16 @@ public class ParserTest {
         IItem testItem = parser.createItem(input);
         assertEquals(name, testItem.getName());
         assertEquals(String.valueOf(randomScore), String.valueOf(testItem.getScore()));
+    }
+
+    @Test
+    public void nameAndNegativeScoreTest() {
+        double randomScore = r.nextDouble();
+        String name = generateStandardName();
+        String input = name + " | -" + randomScore + defaultFiltride;
+        IItem testItem = parser.createItem(input);
+        assertEquals(name, testItem.getName());
+        assertEquals("-"+ randomScore, String.valueOf(testItem.getScore())); //TODO: this is a poor way of testing what I want
     }
 
     @Test
