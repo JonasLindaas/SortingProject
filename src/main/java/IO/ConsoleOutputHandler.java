@@ -6,6 +6,8 @@ import java.util.List;
  * Not even worth commenting on, use should be obvious
  */
 public class ConsoleOutputHandler implements IOutputHandler {
+    private final boolean FORMAT_WITH_NEWLINES = true; //Controls whether the output should be separated to multiple lines
+
     @Override
     public void outputString(String s) {
         System.out.println(s);
@@ -23,18 +25,21 @@ public class ConsoleOutputHandler implements IOutputHandler {
      */
     @Override
     public void outputWithSMFormatting(List<String> s) {
-        String payload      = s.get(0);
-        StringBuilder tmp   = new StringBuilder("$sm " + payload);
+        String tmp = s.get(0);
+        StringBuilder payload = new StringBuilder("$sm " + tmp);
 
-        int t = 1; //Counter var
+        int t = 1; //Counter variable
         for(int i = 1; i < s.size(); i++) {
-            payload = s.get(i);
-            if(tmp.length() + payload.length() > t * 1900) {
-                tmp.append("\n\n$sm ").append(payload);
+            tmp = s.get(i);
+            if(payload.length() + tmp.length() > t * 1900) {
+                payload.append("\n\n$sm ").append(tmp);
                 t++;
-            } else
-                tmp.append("\n$").append(payload);
+            } else {
+                if(FORMAT_WITH_NEWLINES)
+                    payload.append("\n");
+                payload.append("$").append(tmp);
+            }
         }
-        System.out.println(tmp);
+        System.out.println(payload);
     }
 }
