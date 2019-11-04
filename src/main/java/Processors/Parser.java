@@ -91,17 +91,18 @@ public class Parser<E> implements IParser {
                 if(input.charAt(i) == '.') {
                     if(!foundDot)
                         foundDot = true;
-                    else
+                    else {
+                        endOfNumPos = i;
                         break;
+                    }
                 }
 
-                if(!Character.isDigit(input.charAt(i))) {
+                if(!Character.isDigit(input.charAt(i)) && !(input.charAt(i) == '.')) {
                     endOfNumPos = i;
                     break;
                 }
             }
         }
-
         Double score = null;
         if(startOfNumPos != 0)
             score = Double.valueOf(input.substring(startOfNumPos, endOfNumPos));

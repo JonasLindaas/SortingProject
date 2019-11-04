@@ -83,6 +83,45 @@ public class ParserTest {
         IItem testItem = parser.createItem(input);
     }
 
+    @Test
+    public void simpleParseTest() {
+        String name = generateStandardName();
+        String input = name + " | 6.25" + defaultFiltride;
+        IItem testItem = parser.createItem(input);
+        assertEquals("6.25", String.valueOf(testItem.getScore()));
+    }
+
+    @Test
+    public void integerScoreTest() {
+        int randomScore = r.nextInt();
+        String name = generateStandardName();
+        String input = name + " | " + randomScore + defaultFiltride;
+        IItem testItem = parser.createItem(input);
+        assertEquals(name, testItem.getName());
+        assertEquals(String.valueOf(randomScore), String.valueOf((int)testItem.getScore()));
+    }
+
+    @Test
+    public void floatScoreTest() {
+        float randomScore = r.nextFloat();
+        String name = generateStandardName();
+        String input = name + " | " + randomScore + defaultFiltride;
+        IItem testItem = parser.createItem(input);
+        assertEquals(name, testItem.getName());
+        assertEquals(String.valueOf(randomScore), String.valueOf(testItem.getScore()));
+    }
+
+    @Test
+    public void scoreWithTwoPunctuationMarksTest() {
+        double randomScore = r.nextDouble();
+        int randomNumberNoise = r.nextInt();
+        String name = generateStandardName();
+        String input = name + " | " + randomScore + "." + randomNumberNoise + defaultFiltride;
+        IItem testItem = parser.createItem(input);
+        assertEquals(name, testItem.getName());
+        assertEquals(String.valueOf(randomScore), String.valueOf(testItem.getScore()));
+    }
+
     //TODO: there is way too much repeated code in these test
     @Test
     public void justNameTest() {
