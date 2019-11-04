@@ -88,10 +88,14 @@ public class Parser<E> implements IParser {
                         startOfNumPos--;
                 }
             } else {
-                if(!foundDot) {
-                    if(input.charAt(i) == '.')
+                if(input.charAt(i) == '.') {
+                    if(!foundDot)
                         foundDot = true;
-                } else if(!Character.isDigit(input.charAt(i))) {
+                    else
+                        break;
+                }
+
+                if(!Character.isDigit(input.charAt(i))) {
                     endOfNumPos = i;
                     break;
                 }
