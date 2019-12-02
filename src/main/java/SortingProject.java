@@ -20,6 +20,8 @@ public class SortingProject implements ISortingProject {
     private ISort sorter;
     private IOutputHandler outputHandler;
 
+    private boolean USE_OVERRIDES = true;
+
     public SortingProject(IInputHandler inputHandler, IParser parser, ISort sorter, IOutputHandler outputHandler) {
         this.inputHandler = inputHandler;
         this.parser = parser;

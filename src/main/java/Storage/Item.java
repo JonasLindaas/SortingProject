@@ -17,6 +17,16 @@ public class Item implements IItem {
         this.notes = notes;
     }
 
+
+    /**
+     * Looks for a override based on the name of the object. This implementation
+     * This particular implementation simply uses a enum. TODO: Move away from Enum solution
+     */
+    @Override
+    public void activateOverride() {
+
+    }
+
     /**
      * Constructor for items without notes
      * Sets notes to null

@@ -26,4 +26,9 @@ public interface IItem extends Comparable {
      * Prints the item to console
      */
     void printToConsole();
+
+    /**
+     * Attempts to override the score (how it does this is left up to the implementation of the interface)
+     */
+    void activateOverride();
 }
