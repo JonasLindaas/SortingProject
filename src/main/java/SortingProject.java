@@ -52,8 +52,11 @@ public class SortingProject implements ISortingProject {
         }
 
         if(originalOrder.isEmpty()) {
-            for (String s : input)
-                originalOrder.add(parser.createItem(s));
+            for (String s : input) {
+                IItem tmp = parser.createItem(s);
+                tmp.activateOverride();
+                originalOrder.add(tmp);
+            }
         } else {
             throwIllegalAccessError("Items have already been created, and can not be changed after this point");
         }

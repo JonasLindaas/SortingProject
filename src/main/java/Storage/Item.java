@@ -2,7 +2,7 @@ package Storage;
 
 public class Item implements IItem {
     private final String name;
-    private final double score;
+    private double score;
     private final String notes;
 
     /**
@@ -24,7 +24,10 @@ public class Item implements IItem {
      */
     @Override
     public void activateOverride() {
-
+        Overrides potential = Overrides.findOverride(name);
+        if(potential != null) {
+            this.score = potential.getScoreOverride();
+        }
     }
 
     /**
