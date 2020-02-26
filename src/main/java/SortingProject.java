@@ -10,7 +10,7 @@ import java.util.List;
 
 //TODO: needs comments
 public class SortingProject implements ISortingProject {
-    private ArrayList<String> input         = new ArrayList<>();
+    private ArrayList<String> input         = new ArrayList<>(); //TODO: Input should not be stored here, make it local
     private ArrayList<IItem> originalOrder  = new ArrayList<>();
     private ArrayList<IItem> sortedOrder    = new ArrayList<>();
 

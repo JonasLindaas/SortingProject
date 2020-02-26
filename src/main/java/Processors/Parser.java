@@ -2,7 +2,7 @@ package Processors;
 
 import Storage.IItem;
 import Storage.Item;
-import javafx.util.Pair;
+import org.javatuples.Pair;
 
 public class Parser<E> implements IParser {
     private final String DEFAULT_FILTRIDE = "/10";     //The standard filtride used in my scoring system, change if you don't use it
@@ -33,16 +33,16 @@ public class Parser<E> implements IParser {
             return new Item(itemInput);
 
         Pair<String, String> tmp = extractName(itemInput);
-        final String name = tmp.getKey();
-        String notes = tmp.getValue();
+        final String name = tmp.getValue0();
+        String notes = tmp.getValue1();
         Double score = DEFAULT_SCORE;
-        if(tmp.getValue().contains(FILTRIDE)) {
+        if(tmp.getValue1().contains(FILTRIDE)) {
             notes = tryToFilterOut(notes, FILTRIDE);
             Pair<String, Double> notesAndScores = tryToExtractScore(notes);
 
-            if(notesAndScores.getValue() != null) {
-                notes = notesAndScores.getKey();
-                score = notesAndScores.getValue();
+            if(notesAndScores.getValue1() != null) {
+                notes = notesAndScores.getValue0();
+                score = notesAndScores.getValue1();
             }
         }
 
