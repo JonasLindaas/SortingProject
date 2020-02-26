@@ -6,7 +6,8 @@ import java.util.List;
  * Not even worth commenting on, use should be obvious
  */
 public class ConsoleOutputHandler implements IOutputHandler {
-    private final boolean FORMAT_WITH_NEWLINES = true; //Controls whether the output should be separated to multiple lines
+    private final boolean FORMAT_WITH_NEWLINES = true;  //Controls whether the output should be separated to multiple lines
+    private final int MAX_PAYLOAD_LENGTH = 1750;        //The maximum length of each payload
 
     @Override
     public void outputString(String s) {
@@ -31,7 +32,7 @@ public class ConsoleOutputHandler implements IOutputHandler {
         int t = 1; //Counter variable
         for(int i = 1; i < s.size(); i++) {
             tmp = s.get(i);
-            if(payload.length() + tmp.length() > t * 1900) {
+            if(payload.length() + tmp.length() > t * MAX_PAYLOAD_LENGTH) {
                 payload.append("\n\n$sm ").append(tmp);
                 t++;
             } else {
